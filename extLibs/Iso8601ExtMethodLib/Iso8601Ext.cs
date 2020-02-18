@@ -19,7 +19,7 @@ namespace Iso8601ExtMethodLib
                 dateTime = dateTime.ToUniversalTime();
             }
 
-            return dateTime.ToString(ISO8601format) + "Z";
+            return dateTime.ToString(ISO8601format);
         }
 
         /// <summary>

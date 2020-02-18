@@ -24,6 +24,9 @@ namespace DemoNetCoreConsoleApp
             {
                 Console.WriteLine($"Result is {{{converted}}}");
             }
+
+            Console.WriteLine("\r\n\r\nPress enter to exit.");
+            Console.ReadLine();
         }
     }
 }
