@@ -11,6 +11,10 @@ namespace GranDen.CallExtMethodLib
     {
         private readonly Assembly _extensionLibAssembly;
 
+        /// <summary>
+        /// Create an invoker for calling extension method.
+        /// </summary>
+        /// <param name="partialAssemblyName"></param>
         public ExtMethodInvoker(string partialAssemblyName)
         {
             _extensionLibAssembly = partialAssemblyName.GetLoadedAssembly();

@@ -2,6 +2,43 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>GranDen Inc.</Company>
+    <Authors>Isak Pao</Authors>
+    <Description>Invoke C# extension method helper library</Description>
+    <Copyright>Copyright (c) 2020 GranDen Corp.(狂點軟體開發)</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/GranDen-Corp/GranDen.CallExtMethodLib.git</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageTags></PackageTags>
+    <PackageProjectUrl>https://www.nuget.org/packages/GranDen.CallExtMethodLib</PackageProjectUrl>
   </PropertyGroup>
+
+  <Import Project="./version.props" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>./GranDen.CallExtMethodLib.xml</DocumentationFile>
+    <OutputPath>../../output/debug</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>./GranDen.CallExtMethodLib.xml</DocumentationFile>
+    <OutputPath>../../output/release</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="GranDen.CallExtMethodLib.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
 </Project>
