@@ -14,18 +14,18 @@ namespace GranDen.CallExtMethodLib
         /// <summary>
         /// Load Assembly by given partial name
         /// </summary>
-        /// <param name="partialName"></param>
+        /// <param name="partialName">The assembly name without version &amp; public token part.</param>
         /// <returns></returns>
         public static Assembly GetLoadedAssembly(this string partialName)
         {
             var loadedAssembly =
                 AppDomain.CurrentDomain.GetAssemblies()
-                .FirstOrDefault(c => c.FullName.Contains(partialName));
+                .FirstOrDefault(c => c.GetName().Name.Equals(partialName));
 
             if (loadedAssembly != null) { return loadedAssembly; }
 
             var assemblyName = Assembly.GetExecutingAssembly().GetReferencedAssemblies()
-                .FirstOrDefault(c => c.FullName.Contains(partialName));
+                .FirstOrDefault(c => c.Name.Equals(partialName));
 
             return assemblyName == null ? null : Assembly.Load(assemblyName);
         }
@@ -33,10 +33,21 @@ namespace GranDen.CallExtMethodLib
         /// <summary>
         /// Find extension method from assembly.
         /// </summary>
-        /// <param name="assembly"></param>
+        /// <param name="assembly">The assembly that contains the extension method implementation.</param>
+        /// <param name="extMethodInfo">The object that implements <see cref="IExtMethodInfo"/>.</param>
+        /// <returns>The candidates of <see cref="MemberInfo"/> objects.</returns>
+        public static IEnumerable<MethodInfo> GetExtensionMethods(this Assembly assembly, IExtMethodInfo extMethodInfo)
+        {
+            return GetExtensionMethods(assembly, extMethodInfo.ExtendedType, extMethodInfo.MethodName);
+        }
+
+        /// <summary>
+        /// Find extension method from assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly that contains the extension method implementation</param>
         /// <param name="extendedType">The type of the first parameter in Extension method declaration.</param>
-        /// <param name="extensionMethodName"></param>
-        /// <returns></returns>
+        /// <param name="extensionMethodName">Extension method name.</param>
+        /// <returns>The candidates of <see cref="MemberInfo"/> objects.</returns>
         public static IEnumerable<MethodInfo> GetExtensionMethods(this Assembly assembly, Type extendedType, string extensionMethodName)
         {
             var extMethodInfos =

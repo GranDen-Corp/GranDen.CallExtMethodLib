@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using GranDen.CallExtMethodLib;
 using Iso8601ExtMethodLib;
 using Xunit;
 
 namespace LibTestProject
 {
-    public class InvokeExtMethodTest
+    public class InvokeSimpleExtMethodTest
     {
         [Fact]
         public void InvokeToIso8601StringExtMethodTest()

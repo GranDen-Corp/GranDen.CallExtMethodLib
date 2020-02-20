@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
     <PropertyGroup>
-        <PackageReleaseNotes>1.0.0 : &#xD;&#xA;Initial Release</PackageReleaseNotes>
-        <Version>1.0.0</Version>
+        <PackageReleaseNotes>1.0.1 : &#xD;&#xA;Support invoking interface based and overloaded extension methods.</PackageReleaseNotes>
+        <Version>1.0.1</Version>
     </PropertyGroup>
 </Project>
