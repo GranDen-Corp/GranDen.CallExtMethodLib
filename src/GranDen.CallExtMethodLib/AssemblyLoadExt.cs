@@ -23,6 +23,16 @@ namespace GranDen.CallExtMethodLib
             var target = loadedAssemblies.FirstOrDefault(_ => _.GetName().Name.Equals(partialName));
             if (target != null) { return target; }
 
+            foreach (var assembly in loadedAssemblies)
+            {
+                var refAssembly = assembly.GetReferencedAssemblies().FirstOrDefault(_ => _.Name.Equals(partialName));
+                if(refAssembly != null)
+                {
+                    var ret = Assembly.Load(refAssembly);
+                    return ret;
+                }
+            }
+
             var mainAssembly = Assembly.GetEntryAssembly();
             if (mainAssembly == null) { return null;}
 
