@@ -18,14 +18,15 @@ namespace GranDen.CallExtMethodLib
         /// <returns></returns>
         public static Assembly GetLoadedAssembly(this string partialName)
         {
-            var loadedAssembly =
-                AppDomain.CurrentDomain.GetAssemblies()
-                .FirstOrDefault(c => c.GetName().Name.Equals(partialName));
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            if (loadedAssembly != null) { return loadedAssembly; }
+            var target = loadedAssemblies.FirstOrDefault(_ => _.GetName().Name.Equals(partialName));
+            if (target != null) { return target; }
 
-            var assemblyName = Assembly.GetExecutingAssembly().GetReferencedAssemblies()
-                .FirstOrDefault(c => c.Name.Equals(partialName));
+            var mainAssembly = Assembly.GetEntryAssembly();
+            if (mainAssembly == null) { return null;}
+
+            var assemblyName = mainAssembly.GetReferencedAssemblies().FirstOrDefault(_ => _.Name.Equals(partialName));
 
             return assemblyName == null ? null : Assembly.Load(assemblyName);
         }

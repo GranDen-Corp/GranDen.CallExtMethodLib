@@ -11,7 +11,7 @@ namespace DemoNetFrameworkConsoleApp
             Console.WriteLine("=== Call Extension method normally ===");
 
             var utcNow = DateTime.UtcNow;
-            var iso8601Str = utcNow.ToIso8601String(true);
+            var iso8601Str = utcNow.ToIso8601String();
 
             Console.WriteLine($"UTC Now = {{{utcNow}}}\r\nISO8601 : {{{iso8601Str}}}");
 

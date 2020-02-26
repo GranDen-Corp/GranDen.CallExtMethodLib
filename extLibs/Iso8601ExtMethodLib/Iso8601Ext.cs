@@ -4,7 +4,7 @@ namespace Iso8601ExtMethodLib
 {
     public static class Iso8601Ext
     {
-        const string ISO8601format = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK";
+        const string Iso8601Format = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK";
 
         /// <summary>
         /// Produce ISO 8601 format time string
@@ -12,14 +12,20 @@ namespace Iso8601ExtMethodLib
         /// <param name="dateTime"></param>
         /// <param name="IsUTC">Set to true if input datetime is UTC time</param>
         /// <returns></returns>
-        public static string ToIso8601String(this DateTime dateTime, bool IsUTC = false)
+        public static string ToIso8601String(this DateTime dateTime)
         {
-            if (!IsUTC)
+            string ret;
+            if (dateTime.Kind == DateTimeKind.Utc)
             {
-                dateTime = dateTime.ToUniversalTime();
+                ret = dateTime.ToString(Iso8601Format);
             }
-
-            return dateTime.ToString(ISO8601format);
+            else
+            {
+                var utcDateTime = dateTime.ToUniversalTime();
+                ret = utcDateTime.ToString(Iso8601Format);
+            }
+            
+            return ret;
         }
 
         /// <summary>
@@ -29,16 +35,16 @@ namespace Iso8601ExtMethodLib
         /// <returns></returns>
         public static DateTime FromIso8601String(this string input)
         {
-            return ParseIso8601(input).DateTime;
+            return ParseIso8601(input).UtcDateTime;
         }
 
         private static DateTimeOffset ParseIso8601(string iso8601String)
         {
-            var input = iso8601String.Substring(0, iso8601String.Length - 1);
+            //var input = iso8601String.Substring(0, iso8601String.Length - 1);
 
             return DateTimeOffset.ParseExact(
-                input,
-                new string[] { ISO8601format },
+                iso8601String,
+                new[] { Iso8601Format },
                 System.Globalization.CultureInfo.InvariantCulture,
                 System.Globalization.DateTimeStyles.None);
         }

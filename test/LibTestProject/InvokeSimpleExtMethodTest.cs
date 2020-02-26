@@ -13,10 +13,10 @@ namespace LibTestProject
             //Arrange
             var utcNow = DateTime.UtcNow;
             var helper = new ExtMethodInvoker("Iso8601ExtMethodLib");
-            var normalInvocationResult = utcNow.ToIso8601String(true);
+            var normalInvocationResult = utcNow.ToIso8601String();
 
             //Act
-            var result = helper.Invoke<string>("ToIso8601String", utcNow, true);
+            var result = helper.Invoke<string>("ToIso8601String", utcNow);
 
             //Assert
             Assert.Equal(normalInvocationResult, result);
@@ -28,7 +28,7 @@ namespace LibTestProject
             //Arrange
             var utcNow = DateTime.UtcNow;
             var helper = new ExtMethodInvoker("Iso8601ExtMethodLib");
-            var iso8601String = utcNow.ToIso8601String(true);
+            var iso8601String = utcNow.ToIso8601String();
 
             //Act
             var result = helper.Invoke<DateTime>("FromIso8601String", iso8601String);
