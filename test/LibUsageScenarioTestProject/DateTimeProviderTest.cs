@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using DemoDateTimeProviderLib;
 using Xunit;
 
@@ -22,7 +21,6 @@ namespace LibUsageScenarioTestProject
             Assert.Equal(utcNow, provider1.GetStoredDateTime(), TimeSpan.FromSeconds(0.001));
             Assert.Equal(utcNow, provider2.GetStoredDateTime(), TimeSpan.FromSeconds(0.001));
             Assert.Equal(iso8601_1st, iso8601_2nd);
-            
         }
     }
 }

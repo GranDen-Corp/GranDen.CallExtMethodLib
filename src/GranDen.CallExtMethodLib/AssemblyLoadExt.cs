@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Loader;
 
 namespace GranDen.CallExtMethodLib
 {
@@ -26,7 +28,7 @@ namespace GranDen.CallExtMethodLib
             foreach (var assembly in loadedAssemblies)
             {
                 var refAssembly = assembly.GetReferencedAssemblies().FirstOrDefault(_ => _.Name.Equals(partialName));
-                if(refAssembly != null)
+                if (refAssembly != null)
                 {
                     var ret = Assembly.Load(refAssembly);
                     return ret;
@@ -34,11 +36,25 @@ namespace GranDen.CallExtMethodLib
             }
 
             var mainAssembly = Assembly.GetEntryAssembly();
-            if (mainAssembly == null) { return null;}
+            if (mainAssembly == null) { return null; }
 
             var assemblyName = mainAssembly.GetReferencedAssemblies().FirstOrDefault(_ => _.Name.Equals(partialName));
+            if (assemblyName != null)
+            {
+                return Assembly.Load(assemblyName);
+            }
 
-            return assemblyName == null ? null : Assembly.Load(assemblyName);
+            //Force manually load assembly from current exeucting directory
+            var executeDirectoryInfo = GetExecutingDirectory();
+            var assemblyPath = executeDirectoryInfo.FullName + Path.PathSeparator + partialName + ".dll";
+            var loadedAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+            return loadedAssembly;
+        }
+
+        private static DirectoryInfo GetExecutingDirectory()
+        {
+            var location = new Uri(Assembly.GetEntryAssembly().GetName().CodeBase);
+            return new FileInfo(location.AbsolutePath).Directory;
         }
 
         /// <summary>
