@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
     <PropertyGroup>
-        <PackageReleaseNotes>1.0.2 : &#xD;&#xA;Fix assembly load issue when probing extension methods.</PackageReleaseNotes>
-        <Version>1.0.2-test3</Version>
+        <PackageReleaseNotes>1.0.2 : &#xD;&#xA;Fix some assembly load issue when probing extension methods.</PackageReleaseNotes>
+        <Version>1.0.2</Version>
     </PropertyGroup>
 </Project>
