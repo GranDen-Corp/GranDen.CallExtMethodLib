@@ -45,10 +45,35 @@ namespace GranDen.CallExtMethodLib
             }
 
             //Force manually load assembly from current exeucting directory
+            return ForceLoadAssembly(partialName);
+        }
+
+        private static Assembly ForceLoadAssembly(string assemblyPartialName)
+        {
             var executeDirectoryInfo = GetExecutingDirectory();
-            var assemblyPath = executeDirectoryInfo.FullName + Path.PathSeparator + partialName + ".dll";
-            var loadedAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
-            return loadedAssembly;
+            var candidateAssemblyPath = new[] {
+                $"{executeDirectoryInfo.FullName}{Path.DirectorySeparatorChar}{assemblyPartialName}.dll",
+                $"{executeDirectoryInfo.FullName}{Path.DirectorySeparatorChar}{assemblyPartialName}.exe",
+                $"{executeDirectoryInfo.FullName}{Path.DirectorySeparatorChar}{assemblyPartialName}"
+            };
+            Assembly loadedAssembly = null;
+            Exception loadException = null;
+            foreach (var assemblyPath in candidateAssemblyPath)
+            {
+                try
+                {
+                    loadedAssembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+                    loadException = null;
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    loadException = ex;
+                } 
+            }
+
+            if(loadException != null) { throw loadException; }
+            return loadedAssembly;            
         }
 
         private static DirectoryInfo GetExecutingDirectory()
