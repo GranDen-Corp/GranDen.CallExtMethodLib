@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
+using Microsoft.Extensions.DependencyModel;
 
 namespace GranDen.CallExtMethodLib
 {
@@ -16,18 +17,18 @@ namespace GranDen.CallExtMethodLib
         /// <summary>
         /// Load Assembly by given partial name
         /// </summary>
-        /// <param name="partialName">The assembly name without version &amp; public token part.</param>
+        /// <param name="assemblyPartialName">The assembly name without version &amp; public token part.</param>
         /// <returns></returns>
-        public static Assembly GetLoadedAssembly(this string partialName)
+        public static Assembly GetLoadedAssembly(this string assemblyPartialName)
         {
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-            var target = loadedAssemblies.FirstOrDefault(_ => _.GetName().Name.Equals(partialName));
+            var target = loadedAssemblies.FirstOrDefault(_ => _.GetName().Name.Equals(assemblyPartialName));
             if (target != null) { return target; }
 
             foreach (var assembly in loadedAssemblies)
             {
-                var refAssembly = assembly.GetReferencedAssemblies().FirstOrDefault(_ => _.Name.Equals(partialName));
+                var refAssembly = assembly.GetReferencedAssemblies().FirstOrDefault(_ => _.Name.Equals(assemblyPartialName));
                 if (refAssembly != null)
                 {
                     var ret = Assembly.Load(refAssembly);
@@ -38,15 +39,34 @@ namespace GranDen.CallExtMethodLib
             var mainAssembly = Assembly.GetEntryAssembly();
             if (mainAssembly == null) { return null; }
 
-            var assemblyName = mainAssembly.GetReferencedAssemblies().FirstOrDefault(_ => _.Name.Equals(partialName));
+            var assemblyName = mainAssembly.GetReferencedAssemblies().FirstOrDefault(_ => _.Name.Equals(assemblyPartialName));
             if (assemblyName != null)
             {
                 return Assembly.Load(assemblyName);
             }
 
+            //Try to probe assembly from current project's dep.json file records
+            var dependencies = DependencyContext.Default.RuntimeLibraries;
+            foreach (var runtimeLibrary in dependencies)
+            {
+                if(runtimeLibrary.Name.Equals(assemblyPartialName))
+                {
+                    return Assembly.Load(new AssemblyName(runtimeLibrary.Name));
+                }
+
+                if (runtimeLibrary.RuntimeAssemblyGroups.Any(runtimeAssemblyGroup => 
+                    runtimeAssemblyGroup.RuntimeFiles.Any(runtimeFile =>
+                        runtimeFile.Path.EndsWith($"{assemblyPartialName}.dll"))))
+                {
+                    return Assembly.Load(new AssemblyName(assemblyPartialName));
+                }
+            }
+
             //Force manually load assembly from current exeucting directory
-            return ForceLoadAssembly(partialName);
+            return ForceLoadAssembly(assemblyPartialName);
         }
+
+        
 
         private static Assembly ForceLoadAssembly(string assemblyPartialName)
         {
