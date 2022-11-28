@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
     <PropertyGroup>
-        <PackageReleaseNotes>1.0.3 : &#xD;&#xA;Aditional probing assembly in installed nuget packages</PackageReleaseNotes>
-        <Version>1.0.3</Version>
+        <PackageReleaseNotes>1.0.4 : &#xD;&#xA;Use .NET 6 SDK</PackageReleaseNotes>
+        <Version>1.0.4</Version>
     </PropertyGroup>
 </Project>
